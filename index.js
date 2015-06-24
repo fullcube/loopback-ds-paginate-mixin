@@ -3,28 +3,31 @@ var utils = require('loopback-datasource-juggler/lib/utils');
 var assert = require('assert');
 var _ = require('lodash');
 
-function Paginate(Model, config) {
+function Paginate(Model, options) {
   'use strict';
 
   var mixinName = 'Paginate';
   var modelName = Model.definition.name;
   var debugPrefix = mixinName + ': ' + modelName + ': ';
-  debug(debugPrefix + 'Loading with config %o', config);
+  debug(debugPrefix + 'Loading with config %o', options);
 
   Model.paginate = function(page, limit, query, cb) {
     cb = cb || utils.createPromiseCallback();
 
     // Check if page is passed otherwise default to 1
-    if (_.isUndefined(page)) {
-      debug(debugPrefix + 'paginate: page undefined: %s', page);
+    if (!page) {
+      debug(debugPrefix + 'paginate: page undefined:');
       page = 1;
     } else {
-      debug(debugPrefix + 'paginate: page defined: %s', page);
+      debug(debugPrefix + 'paginate: page defined as: %s', page);
     }
 
     // Check if limit is passed otherwise set to mixin config or default
-    if (_.isUndefined(limit)) {
-      limit = config.options.limit || 10;
+    if (!limit) {
+      debug(debugPrefix + 'paginate: limit undefined:');
+      limit = options.limit || 10;
+    } else {
+      debug(debugPrefix + 'paginate: limit defined as: %s', page);
     }
 
     // Do some assertions
