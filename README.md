@@ -2,13 +2,13 @@ PAGINATION
 =============
 
 This module is designed for the [Strongloop Loopback](https://github.com/strongloop/loopback) framework.
-It provides a mixin that makes it easy to add pagination to an existing model
+It provides a mixin that makes it easy to add paginate to an existing model
 
 INSTALL
 =============
 
 ```bash
-npm install --save loopback-ds-pagination-mixin
+npm install --save loopback-ds-paginate-mixin
 ```
 
 SERVER.JS
@@ -22,7 +22,7 @@ In your `server/server.js` file add the following line before the
 var app = module.exports = loopback();
 ...
 // Add Readonly Mixin to loopback
-require('loopback-ds-pagination-mixin')(app);
+require('loopback-ds-paginate-mixin')(app);
 
 boot(app, __dirname, function(err) {
   'use strict';
@@ -48,7 +48,7 @@ To use with your Models add the `mixins` attribute to the definition object of y
         "status": "String"
     },
     "mixins": {
-        "Pagination": {
+        "Paginate": {
             "config": {
                 "limit": "10"
             }
@@ -70,5 +70,5 @@ Run the tests in `test.js`
 Run with debugging output on:
 
 ```bash
-  DEBUG='loopback-ds-pagination-mixin' npm test
+  DEBUG='loopback-ds-paginate-mixin' npm test
 ```
