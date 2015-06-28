@@ -25,9 +25,9 @@ require('./')(app);
 // Configure datasource
 dbConnector = loopback.memory();
 
-describe('loopback datasource paginate mixin', function() {
+describe('loopback datasource paginate mixin', function () {
 
-  beforeEach(function(done) {
+  beforeEach(function (done) {
 
     // A model with 2 Changed properties.
     var Item = this.Item = loopback.PersistedModel.extend('item', {
@@ -54,20 +54,20 @@ describe('loopback datasource paginate mixin', function() {
 
   lt.beforeEach.withApp(app);
 
-  describe('Testing behaviour', function() {
-    for(var i = 1; i <= 49; i++) {
+  describe('Testing behaviour', function () {
+    for (var i = 1; i <= 49; i++) {
       lt.beforeEach.givenModel('item', {
-        name:'Item' + i,
+        name: 'Item' + i,
         description: 'This is item with id' + i,
         status: 'active'
       }, 'item' + i);
     }
 
 
-    describe('Model.find', function() {
-      it('Default find operation.', function(done) {
+    describe('Model.find', function () {
+      it('Default find operation.', function (done) {
 
-        this.Item.find().then(function(result){
+        this.Item.find().then(function (result) {
           assert.equal(result.length, 49, 'Should return all items');
           done();
         });
@@ -75,46 +75,48 @@ describe('loopback datasource paginate mixin', function() {
       });
     });
 
-    describe('Model.paginate', function() {
-      it('Paginate without parameters', function(done) {
-        this.Item.paginate().then(function(result){
-          console.log('result', result.paging);
-          assert.equal(result.paging.totalItems, 49, 'Should return total items');
-          assert.equal(result.paging.totalPages, 5, 'Should return total pages');
-          assert.equal(result.paging.itemsPerPage, 10, 'Should items per page');
-          assert.equal(result.paging.currentPage, 1, 'Should return current page');
-          assert.equal(result.result.length, 10, 'Should return one page');
+    describe('Model.paginate', function () {
+      it('Paginate without parameters', function (done) {
+        this.Item.paginate().then(function (result) {
+          assert.equal(result.counters.itemsTotal, 49, 'Should return total items');
+          assert.equal(result.counters.pageTotal, 5, 'Should return total pages');
+          assert.equal(result.counters.itemsPerPage, 10, 'Should items per page');
+          assert.equal(result.counters.itemsFrom, 0, 'Should return correct itemsFrom');
+          assert.equal(result.items.length, 10, 'Should return one page');
           done();
         });
       });
 
-      it('Paginate with where filter', function(done) {
-        var page = 1;
-        var limit = 10;
-        this.Item.paginate(page, limit, {
+      it('Paginate with where filter', function (done) {
+        var request = {
+          skip: 0,
+          limit: 10,
           where: {
             name: 'Item1'
           }
-        }).then(function(result){
-          assert.equal(result.paging.totalItems, 1, 'Should return total items');
-          assert.equal(result.paging.totalPages, 1, 'Should return total pages');
-          assert.equal(result.paging.itemsPerPage, limit, 'Should items per page');
-          assert.equal(result.paging.currentPage, page, 'Should return current page');
-          assert.equal(result.result.length, 1, 'Should return the right number of items');
+        };
+        this.Item.paginate(request).then(function (result) {
+          assert.equal(result.counters.itemsTotal, 1, 'Should return total items');
+          assert.equal(result.counters.pageTotal, 1, 'Should return total pages');
+          assert.equal(result.counters.itemsPerPage, request.limit, 'Should items per page');
+          assert.equal(result.counters.itemsFrom, request.skip, 'Should return correct itemsFrom');
+          assert.equal(result.items.length, 1, 'Should return the right number of items');
           done();
         });
       });
 
 
-      it('Paginate with small page', function(done) {
-        var page = 1;
-        var limit = 4;
-        this.Item.paginate(page, limit).then(function(result){
-          assert.equal(result.paging.totalItems, 49, 'Should return total items');
-          assert.equal(result.paging.totalPages, 13, 'Should return total pages');
-          assert.equal(result.paging.itemsPerPage, limit, 'Should items per page');
-          assert.equal(result.paging.currentPage, page, 'Should return current page');
-          assert.equal(result.result.length, limit, 'Should return the right number of items');
+      it('Paginate with small page', function (done) {
+        var request = {
+          skip: 0,
+          limit: 4
+        };
+        this.Item.paginate(request).then(function (result) {
+          assert.equal(result.counters.itemsTotal, 49, 'Should return total items');
+          assert.equal(result.counters.pageTotal, 13, 'Should return total pages');
+          assert.equal(result.counters.itemsPerPage, request.limit, 'Should items per page');
+          assert.equal(result.counters.itemsFrom, request.skip, 'Should return correct itemsFrom');
+          assert.equal(result.items.length, request.limit, 'Should return the right number of items');
           done();
         });
       });

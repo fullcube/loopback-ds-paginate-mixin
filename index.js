@@ -11,34 +11,41 @@ function Paginate(Model, options) {
   var debugPrefix = mixinName + ': ' + modelName + ': ';
   debug(debugPrefix + 'Loading with config %o', options);
 
-  Model.paginate = function(page, limit, query, cb) {
+  Model.paginate = function(query, cb) {
     cb = cb || utils.createPromiseCallback();
 
-    // Check if page is passed otherwise default to 1
-    if (!page) {
-      debug(debugPrefix + 'paginate: page undefined:');
-      page = 1;
-    } else {
-      debug(debugPrefix + 'paginate: page defined as: %s', page);
+    if (_.isUndefined(query)) {
+      query = {};
     }
 
+    assert(typeof query, 'object', 'Page should always be an object');
+
+    debug(debugPrefix + 'paginate: query: %o', query);
+
     // Check if limit is passed otherwise set to mixin config or default
-    if (!limit) {
-      debug(debugPrefix + 'paginate: limit undefined:');
-      limit = options.limit || 10;
+    if (_.isUndefined(query.limit)) {
+      debug(debugPrefix + 'paginate: limit undefined');
+      query.limit = options.limit || 10;
     } else {
-      debug(debugPrefix + 'paginate: limit defined as: %s', page);
+      debug(debugPrefix + 'paginate: limit defined: %s', query.limit);
+    }
+
+    // Check if skip is passed otherwise default to 1
+    if (!query.skip) {
+      debug(debugPrefix + 'paginate: skip undefined');
+      query.skip = 0;
+    } else {
+      debug(debugPrefix + 'paginate: skip defined: %s', query.skip);
     }
 
     // Do some assertions
     // TODO: These values should never be negative
-    assert(typeof page, 'number', 'Page should always be a number');
-    assert(typeof limit, 'number', 'Limit should always be a number');
+    assert(typeof query.limit, 'number', 'Limit should always be a number');
 
     // Define the initial params object
     var params = {
-      skip: (page - 1) * limit,
-      limit: limit
+      skip: query.skip,
+      limit: query.limit
     };
 
     // Check if additional query parameters are passed
@@ -58,6 +65,52 @@ function Paginate(Model, options) {
 
     }
 
+    // Handle the passed search terms
+    if (!_.isEmpty(query.searchTerms)) {
+      debug(debugPrefix + 'query.searchTerms: %o', query.searchTerms);
+
+      // Create a new 'and' query
+      params.where = {
+        and: []
+      };
+
+      // Loop through the search terms
+      _.mapKeys(query.searchTerms, function(term, key) {
+
+        // Handle wildcard search
+        if (key === '*') {
+          params.where.or = [];
+
+          // Add an 'or' item for each property
+          Object.keys(Model.definition.properties).map(function(key) {
+            var bit = {};
+            bit[key] = {
+              like: term,
+              options: 'i'
+            };
+            params.where.or.push(bit);
+          });
+        } else {
+
+          // Add an 'and' item for each key
+          var bit = {};
+          bit[key] = {
+            like: term,
+            options: 'i'
+          };
+          params.where.and.push(bit);
+        }
+      });
+
+    }
+
+    if (!_.isEmpty(query.sortOrder)) {
+      debug(debugPrefix + 'query.sortOrder: %o', query.sortOrder);
+      this.sortOrder = (query.sortOrder.reverse === true) ? 'DESC' : 'ASC';
+      this.sortBy = query.sortOrder.predicate;
+      params.order = this.sortBy + ' ' + this.sortOrder;
+    }
+
     debug(debugPrefix + 'paginate: params: %o', params);
 
     // Define where query used for counter
@@ -71,13 +124,14 @@ function Paginate(Model, options) {
 
         // Format the result
         var result = {
-          paging: {
-            totalItems: count,
-            totalPages: Math.ceil(count / limit),
-            itemsPerPage: limit,
-            currentPage: page
+          counters: {
+            itemsFrom: query.skip,
+            itemsTo: query.skip + items.length,
+            itemsTotal: count,
+            itemsPerPage: query.limit,
+            pageTotal: Math.ceil(count / query.limit)
           },
-          result: items
+          items: items
         };
 
         debug(debugPrefix + 'paginate: result: %o', result);
@@ -89,13 +143,23 @@ function Paginate(Model, options) {
   };
 
   Model.remoteMethod('paginate', {
-    accepts: [
-      {arg: 'page', type: 'number'},
-      {arg: 'limit', type: 'number'},
-      {arg: 'query', type: 'object'}
-    ],
-    returns: {arg: 'result', type: 'string', root: true},
-    http: {path: '/paginate', verb: 'get'}
+    accepts: [{
+      arg: 'query',
+      type: 'object',
+      required: false,
+      http: {
+        source: 'body'
+      }
+    }],
+    returns: {
+      arg: 'result',
+      type: 'string',
+      root: true
+    },
+    http: {
+      path: '/paginate',
+      verb: 'post'
+    }
   });
 
 }
