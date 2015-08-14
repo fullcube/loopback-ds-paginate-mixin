@@ -49,9 +49,7 @@ To use with your Models add the `mixins` attribute to the definition object of y
     },
     "mixins": {
         "Paginate": {
-            "config": {
-                "limit": "10"
-            }
+            "limit": "10"
         }
     }
 }
