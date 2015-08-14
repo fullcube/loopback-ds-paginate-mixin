@@ -24,7 +24,7 @@ function Paginate(Model, options) {
 
     // Check if limit is passed otherwise set to mixin config or default
     if (_.isUndefined(query.limit)) {
-      query.limit = options.config.limit || 10;
+      query.limit = options.limit || 10;
       debug(debugPrefix + 'paginate: limit undefined, using default:', query.limit);
     } else {
       debug(debugPrefix + 'paginate: limit defined: %s', query.limit);
