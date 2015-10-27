@@ -10,7 +10,21 @@ function Paginate(Model, config) {
   var debugPrefix = 'Model: ' + modelName + ': ';
   debug(debugPrefix + 'Loading with config %o', config);
 
-  Model.paginate = function(query, cb) {
+  Model.paginate = function(query, options, cb) {
+
+    if (cb === undefined) {
+      debug(debugPrefix + 'paginate(): cb: undefined');
+      if (typeof options === 'function') {
+        cb = options;
+        options = {};
+        debug(debugPrefix + 'paginate(): cb: undefined: using the second parameter.');
+      }
+      if (_.isUndefined(options)) {
+        options = {};
+        debug(debugPrefix + 'paginate(): cb: undefined: set options %j', options);
+      }
+    }
+
     cb = cb || utils.createPromiseCallback();
 
     if (_.isUndefined(query)) {
@@ -22,26 +36,31 @@ function Paginate(Model, config) {
 
     assert(typeof query, 'object', 'Page should always be an object');
 
-
     // Check if limit is passed otherwise set to mixin config or default
     if (_.isUndefined(query.limit)) {
       query.limit = config.limit || 10;
-      debug(debugPrefix + 'paginate(): limit: undefined, default: %s', query.limit);
+      debug(debugPrefix + 'paginate(): query.limit: undefined, default: %s', query.limit);
     } else {
-      debug(debugPrefix + 'paginate(): limit: defined: %s', query.limit);
+      debug(debugPrefix + 'paginate(): query.limit: defined: %s', query.limit);
     }
 
     // Check if skip is passed otherwise default to 1
     if (!query.skip) {
       query.skip = 0;
-      debug(debugPrefix + 'paginate(): skip: undefined, default: %s', query.skip);
+      debug(debugPrefix + 'paginate(): query.skip: undefined, default: %s', query.skip);
     } else {
-      debug(debugPrefix + 'paginate(): skip: defined: %s', query.skip);
+      debug(debugPrefix + 'paginate(): query.skip: defined: %s', query.skip);
     }
 
     // Do some assertions
     // TODO: These values should never be negative
     assert(typeof query.limit, 'number', 'Limit should always be a number');
+
+    // Allow overriding of the limit by setting the second parameter
+    if (!_.isUndefined(options.limit)) {
+      query.limit = options.limit;
+      debug(debugPrefix + 'paginate(): options.limit: defined: %s, overriding query.limit', options.limit);
+    }
 
     // Define the initial params object
     var params = {
