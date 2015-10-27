@@ -6,9 +6,8 @@ var _ = require('lodash');
 function Paginate(Model, options) {
   'use strict';
 
-  var mixinName = 'Paginate';
   var modelName = Model.definition.name;
-  var debugPrefix = mixinName + ': ' + modelName + ': ';
+  var debugPrefix = 'Model: ' + modelName + ': ';
   debug(debugPrefix + 'Loading with config %o', options);
 
   Model.paginate = function(query, cb) {
@@ -16,26 +15,28 @@ function Paginate(Model, options) {
 
     if (_.isUndefined(query)) {
       query = {};
+      debug(debugPrefix + 'paginate(): query: undefined, default: %j', query);
+    } else {
+      debug(debugPrefix + 'paginate(): query: defined: %j', query);
     }
 
     assert(typeof query, 'object', 'Page should always be an object');
 
-    debug(debugPrefix + 'paginate: query: %o', query);
 
     // Check if limit is passed otherwise set to mixin config or default
     if (_.isUndefined(query.limit)) {
       query.limit = options.limit || 10;
-      debug(debugPrefix + 'paginate: limit undefined, using default:', query.limit);
+      debug(debugPrefix + 'paginate(): limit: undefined, default: %s', query.limit);
     } else {
-      debug(debugPrefix + 'paginate: limit defined: %s', query.limit);
+      debug(debugPrefix + 'paginate(): limit: defined: %s', query.limit);
     }
 
     // Check if skip is passed otherwise default to 1
     if (!query.skip) {
-      debug(debugPrefix + 'paginate: skip undefined');
       query.skip = 0;
+      debug(debugPrefix + 'paginate(): skip: undefined, default: %s', query.skip);
     } else {
-      debug(debugPrefix + 'paginate: skip defined: %s', query.skip);
+      debug(debugPrefix + 'paginate(): skip: defined: %s', query.skip);
     }
 
     // Do some assertions
@@ -58,7 +59,7 @@ function Paginate(Model, options) {
         if (!_.isUndefined(query[queryParam])) {
           params[queryParam] = query[queryParam];
 
-          debug(debugPrefix + 'paginate: adding param: %s = %o', queryParam,
+          debug(debugPrefix + 'paginate(): adding param: %s = %o', queryParam,
             query[queryParam]);
         }
       });
@@ -111,7 +112,7 @@ function Paginate(Model, options) {
       params.order = this.sortBy + ' ' + this.sortOrder;
     }
 
-    debug(debugPrefix + 'paginate: params: %o', params);
+    debug(debugPrefix + 'paginate(): params: %o', params);
 
     // Define where query used for counter
     var countWhere = params.where || {};
@@ -134,7 +135,7 @@ function Paginate(Model, options) {
           items: items
         };
 
-        debug(debugPrefix + 'paginate: result: %o', result);
+        debug(debugPrefix + 'paginate(): result: %o', result);
         cb(null, result);
       }).catch(cb);
     }).catch(cb);
