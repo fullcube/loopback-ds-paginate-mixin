@@ -26,7 +26,6 @@
     "jshint": "latest",
     "loopback": "2.x",
     "loopback-connector-mongodb": "^1.11.1",
-    "loopback-datasource-juggler": "^2.30.1",
     "loopback-testing": "1.x",
     "mocha": "latest",
     "mocha-sinon": "latest",
