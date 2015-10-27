@@ -55,6 +55,50 @@ To use with your Models add the `mixins` attribute to the definition object of y
 }
 ```
 
+USAGE
+=============
+
+```javascript
+
+// The basic 
+var request = {
+  skip: 0,
+  limit: 15,
+  where: {
+    status: 'active'
+  }
+}
+
+// Using a Promise
+Item.paginate(request).then(function(result) {
+  // The first 15 active items are in result
+  console.log(result);
+}).catch(function(err){
+  // Handle errors here
+  console.error(err);
+});
+
+// Using a callback
+Item.paginate(request, function(err, result) {
+  // Handle errors here if err !== null
+  if(err) console.error(err);
+  // The first 15 active items are in result
+  console.log(result);
+});
+
+// You can override the limit on a per-request base
+var options = {
+  limit: 5
+}
+Item.paginate(request, options).then(function(result) {
+  // The first 5 active items are in result
+  console.log(result);
+}).catch(function(err){
+  // Handle errors here
+  console.error(err);
+});
+   
+```
 
 TESTING
 =============
