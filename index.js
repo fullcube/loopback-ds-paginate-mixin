@@ -8,7 +8,7 @@ function Paginate(Model, config) {
 
   var modelName = Model.definition.name;
   var debugPrefix = 'Model: ' + modelName + ': ';
-  debug(debugPrefix + 'Loading with config %o', config);
+  debug(debugPrefix + 'Loading with config %j', config);
 
   Model.paginate = function(query, options, cb) {
 
@@ -78,7 +78,7 @@ function Paginate(Model, config) {
         if (!_.isUndefined(query[queryParam])) {
           params[queryParam] = query[queryParam];
 
-          debug(debugPrefix + 'paginate(): adding param: %s = %o', queryParam,
+          debug(debugPrefix + 'paginate(): adding param: %s = %j', queryParam,
             query[queryParam]);
         }
       });
@@ -87,7 +87,7 @@ function Paginate(Model, config) {
 
     // Handle the passed search terms
     if (!_.isEmpty(query.searchTerms)) {
-      debug(debugPrefix + 'query.searchTerms: %o', query.searchTerms);
+      debug(debugPrefix + 'query.searchTerms: %j', query.searchTerms);
 
       // Create a new 'and' query
       params.where = {
@@ -125,13 +125,13 @@ function Paginate(Model, config) {
     }
 
     if (!_.isEmpty(query.sortOrder)) {
-      debug(debugPrefix + 'query.sortOrder: %o', query.sortOrder);
+      debug(debugPrefix + 'query.sortOrder: %j', query.sortOrder);
       this.sortOrder = (query.sortOrder.reverse === true) ? 'DESC' : 'ASC';
       this.sortBy = query.sortOrder.predicate;
       params.order = this.sortBy + ' ' + this.sortOrder;
     }
 
-    debug(debugPrefix + 'paginate(): params: %o', params);
+    debug(debugPrefix + 'paginate(): params: %j', params);
 
     // Define where query used for counter
     var countWhere = params.where || {};
@@ -154,7 +154,7 @@ function Paginate(Model, config) {
           items: items
         };
 
-        debug(debugPrefix + 'paginate(): result: %o', result);
+        debug(debugPrefix + 'paginate(): result: %j', result);
         cb(null, result);
       }).catch(cb);
     }).catch(cb);
