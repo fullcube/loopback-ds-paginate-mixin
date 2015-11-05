@@ -172,7 +172,36 @@ describe('loopback datasource paginate mixin', function() {
         });
       });
 
-    });
+      it('Paginate with page when skip is falsey', function(done) {
+        var request = {
+          skip: 0,
+          limit: 10,
+          page: 5
+        };
+        this.Item.paginate(request).then(function(result) {i
+          assert.equal(result.counters.itemsTotal, 49, 'Should return total items');
+          assert.equal(result.counters.pageTotal, 5, 'Should return total pages');
+          assert.equal(result.counters.itemsPerPage, request.limit, 'Should items per page');
+          assert.equal(result.counters.itemsFrom, request.skip, 'Should return correct itemsFrom');
+          assert.equal(result.items.length, 9, 'Should return the right number of items');
+          done();
+        });
+      });
 
+      it('Paginate with page when skip undefined', function(done) {
+        var request = {
+          limit: 6,
+          page: 9
+        };
+        this.Item.paginate(request).then(function(result) {i
+          assert.equal(result.counters.itemsTotal, 49, 'Should return total items');
+          assert.equal(result.counters.pageTotal, 9, 'Should return total pages');
+          assert.equal(result.counters.itemsPerPage, request.limit, 'Should items per page');
+          assert.equal(result.counters.itemsFrom, 48, 'Should return correct itemsFrom');
+          assert.equal(result.items.length, 1, 'Should return the right number of items');
+          done();
+        });
+      });
+    });
   });
 });
