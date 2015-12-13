@@ -44,17 +44,21 @@ function Paginate(Model, config) {
       debug(debugPrefix + 'paginate(): query.limit: defined: %s', query.limit);
     }
 
-    // Check if skip is passed otherwise default to 1
-    if (!query.skip) {
+    // Do some assertions
+    // TODO: These values should never be negative
+    assert(typeof query.limit, 'number', 'Limit should always be a number');
+
+    // Check if skip of page is passed otherwise default to 1
+    if (!query.skip && !_.isUndefined(query.page)) {
+      assert(typeof query.page, 'number', 'Page should always be a number');
+      query.skip = (query.page - 1) * query.limit;
+      debug(debugPrefix + 'paginate(): query.skip: undefined, default: %s', query.skip);
+    } else if(!query.skip) {
       query.skip = 0;
       debug(debugPrefix + 'paginate(): query.skip: undefined, default: %s', query.skip);
     } else {
       debug(debugPrefix + 'paginate(): query.skip: defined: %s', query.skip);
     }
-
-    // Do some assertions
-    // TODO: These values should never be negative
-    assert(typeof query.limit, 'number', 'Limit should always be a number');
 
     // Allow overriding of the limit by setting the second parameter
     if (!_.isUndefined(options.limit)) {
