@@ -161,7 +161,6 @@ describe('loopback datasource paginate mixin', function() {
           limit: 4
         };
         this.Item.paginate(request, options, function(err, result) {
-          console.log(err);
           assert.equal(err, null, 'Should return no error');
           assert.equal(result.counters.itemsTotal, 49, 'Should return total items');
           assert.equal(result.counters.pageTotal, 13, 'Should return total pages');
