@@ -53,7 +53,7 @@ function Paginate(Model, config) {
       assert(typeof query.page, 'number', 'Page should always be a number');
       query.skip = (query.page - 1) * query.limit;
       debug(debugPrefix + 'paginate(): query.skip: undefined, default: %s', query.skip);
-    } else if(!query.skip) {
+    } else if (!query.skip) {
       query.skip = 0;
       debug(debugPrefix + 'paginate(): query.skip: undefined, default: %s', query.skip);
     } else {
