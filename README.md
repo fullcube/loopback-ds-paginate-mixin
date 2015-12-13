@@ -21,7 +21,7 @@ In your `server/server.js` file add the following line before the
 ...
 var app = module.exports = loopback();
 ...
-// Add Readonly Mixin to loopback
+// Add Paginate Mixin to loopback
 require('loopback-ds-paginate-mixin')(app);
 
 boot(app, __dirname, function(err) {
@@ -49,7 +49,8 @@ To use with your Models add the `mixins` attribute to the definition object of y
     },
     "mixins": {
         "Paginate": {
-            "limit": "10"
+            "limit": 10,
+            "maxLimit": 100,
         }
     }
 }

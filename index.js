@@ -38,7 +38,7 @@ function Paginate(Model, config) {
 
     // Check if limit is passed otherwise set to mixin config or default
     if (_.isUndefined(query.limit)) {
-      query.limit = config.limit || 10;
+      query.limit = config.options.limit || 10;
       debug(debugPrefix + 'paginate(): query.limit: undefined, default: %s', query.limit);
     } else {
       debug(debugPrefix + 'paginate(): query.limit: defined: %s', query.limit);
@@ -64,6 +64,20 @@ function Paginate(Model, config) {
     if (!_.isUndefined(options.limit)) {
       query.limit = options.limit;
       debug(debugPrefix + 'paginate(): options.limit: defined: %s, overriding query.limit', options.limit);
+    }
+
+    // Check if maxLimit is set and adjust limit accordingly
+    if (!_.isUndefined(config.options.maxLimit)) {
+      assert(typeof config.options.maxLimit, 'number', 'maxLimit option should always be a number');
+      debug(debugPrefix + 'paginate(): config.options.maxLimit: defined: %s', config.options.maxLimit);
+
+      if (parseInt(query.limit) > parseInt(config.options.maxLimit)) {
+        console.log('aaaaaaa');
+        debug(debugPrefix + 'paginate(): limit larger than maxLimit, adjusted to %s', config.options.maxLimit);
+        query.limit = config.options.maxLimit;
+      }
+    } else {
+      debug(debugPrefix + 'paginate(): config.options.maxLimit: undefined');
     }
 
     // Define the initial params object
