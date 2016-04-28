@@ -11,30 +11,29 @@ INSTALL
 npm install --save loopback-ds-paginate-mixin
 ```
 
-SERVER.JS
+SERVER CONFIG
 =============
+Add the mixins property to your server/model-config.json:
 
-In your `server/server.js` file add the following line before the
-`boot(app, __dirname);` line.
-
-```javascript
-...
-var app = module.exports = loopback();
-...
-// Add Readonly Mixin to loopback
-require('loopback-ds-paginate-mixin')(app);
-
-boot(app, __dirname, function(err) {
-  'use strict';
-  if (err) throw err;
-
-  // start the server if `$ node server.js`
-  if (require.main === module)
-    app.start();
-});
+```
+{
+  "_meta": {
+    "sources": [
+      "loopback/common/models",
+      "loopback/server/models",
+      "../common/models",
+      "./models"
+    ],
+    "mixins": [
+      "loopback/common/mixins",
+      "../node_modules/loopback-ds-paginate-mixin/lib",
+      "../common/mixins"
+    ]
+  }
+}
 ```
 
-CONFIG
+MODEL CONFIG
 =============
 
 To use with your Models add the `mixins` attribute to the definition object of your model config.
@@ -60,7 +59,7 @@ USAGE
 
 ```javascript
 
-// The basic 
+// The basic
 var request = {
   skip: 0,
   limit: 15,
