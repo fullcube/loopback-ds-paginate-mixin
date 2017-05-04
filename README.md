@@ -1,6 +1,8 @@
 PAGINATION
 =============
 
+[![Greenkeeper badge](https://badges.greenkeeper.io/fullcube/loopback-ds-paginate-mixin.svg)](https://greenkeeper.io/)
+
 This module is designed for the [Strongloop Loopback](https://github.com/strongloop/loopback) framework.
 It provides a mixin that makes it easy to add paginate to an existing model
 
