@@ -18,8 +18,7 @@ const dbConnector = loopback.memory()
 
 describe('loopback datasource paginate mixin', () => {
 
-  beforeEach(function() {
-
+  before(function() {
     // A model with 2 Changed properties.
     this.Item = loopback.PersistedModel.extend('item', {
       name: String,
@@ -110,7 +109,8 @@ describe('loopback datasource paginate mixin', () => {
       it('Paginate overriding the limit', function() {
         const request = {
           skip: 0,
-          limit: 10, // This value is overwritten by the options value below
+          // This value is overwritten by the options value below
+          limit: 10,
         }
         const options = {
           limit: 4,
@@ -141,7 +141,8 @@ describe('loopback datasource paginate mixin', () => {
       it('Paginate with a callback instead of a promise, overriding the limit', function() {
         const request = {
           skip: 0,
-          limit: 10, // This value is overwritten by the options value below
+          // This value is overwritten by the options value below
+          limit: 10,
         }
         const options = {
           limit: 4,
