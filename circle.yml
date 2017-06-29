@@ -1,6 +1,9 @@
 machine:
   node:
     version: 6.1.0
+test:
+  post:
+    - npm run coverage
 deployment:
    master:
      branch: master
