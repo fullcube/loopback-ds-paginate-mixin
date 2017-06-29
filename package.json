@@ -28,10 +28,12 @@
   },
   "devDependencies": {
     "chai": "4.0.2",
+    "eslint": "4.1.1",
     "eslint-config-fullcube": "3.0.0",
     "loopback": "3.8.0",
     "loopback-connector-mongodb": "3.2.0",
     "loopback-testing": "1.4.0",
-    "mocha": "3.4.2"
+    "mocha": "3.4.2",
+    "nyc": "11.0.3"
   }
 }
