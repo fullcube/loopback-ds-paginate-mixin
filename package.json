@@ -1,6 +1,6 @@
 {
   "name": "loopback-ds-paginate-mixin",
-  "version": "1.0.4",
+  "version": "0.0.0-development",
   "description": "A mixin to enable easy pagination for a loopback Model.",
   "main": "lib/index.js",
   "keywords": [
@@ -18,7 +18,9 @@
     "lint": "eslint .",
     "test": "NODE_ENV=test nyc --reporter=lcov --reporter=text --reporter=text-summary mocha test/*test.js",
     "test:watch": "npm run test -- -w",
-    "pretest": "npm run lint"
+    "pretest": "npm run lint",
+    "semantic-release": "semantic-release pre && npm publish && semantic-release post",
+    "commitmsg": "validate-commit-msg"
   },
   "dependencies": {
     "bluebird": "3.5.0",
@@ -27,13 +29,41 @@
     "lodash": "4.17.4"
   },
   "devDependencies": {
+    "@bubltechnology/customizable-commit-analyzer": "1.0.2-0",
     "chai": "4.0.2",
+    "condition-circle": "1.5.0",
+    "conventional-commit-types": "2.1.0",
     "eslint": "4.1.1",
     "eslint-config-fullcube": "3.0.0",
+    "husky": "0.14.1",
     "loopback": "3.8.0",
     "loopback-connector-mongodb": "3.2.0",
     "loopback-testing": "1.4.0",
     "mocha": "3.4.2",
-    "nyc": "11.0.3"
+    "nyc": "11.0.3",
+    "semantic-release": "6.3.6",
+    "validate-commit-msg": "2.12.2"
+  },
+  "config": {
+    "commitTypeMap": {
+      "feat": "minor",
+      "fix": "patch",
+      "docs": "patch",
+      "style": "patch",
+      "refactor": "patch",
+      "perf": "patch",
+      "test": "patch",
+      "build": "patch",
+      "ci": "patch",
+      "chore": "patch",
+      "revert": "patch"
+    },
+    "validate-commit-msg": {
+      "types": "conventional-commit-types"
+    }
+  },
+  "release": {
+    "verifyConditions": "condition-circle",
+    "analyzeCommits": "@bubltechnology/customizable-commit-analyzer"
   }
 }
