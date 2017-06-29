@@ -14,6 +14,12 @@
     "type": "git",
     "url": "https://github.com/fullcube/loopback-ds-paginate-mixin"
   },
+  "scripts": {
+    "lint": "eslint .",
+    "test": "NODE_ENV=test nyc --reporter=lcov --reporter=text --reporter=text-summary mocha test/*test.js",
+    "test:watch": "npm run test -- -w",
+    "pretest": "npm run lint"
+  },
   "dependencies": {
     "bluebird": "3.5.0",
     "debug": "2.6.8",
@@ -21,21 +27,11 @@
     "lodash": "4.17.4"
   },
   "devDependencies": {
-    "chai": "latest",
-    "jscs": "3.0.7",
-    "jshint": "latest",
+    "chai": "4.0.2",
+    "eslint-config-fullcube": "3.0.0",
     "loopback": "3.8.0",
     "loopback-connector-mongodb": "3.2.0",
     "loopback-testing": "1.4.0",
-    "mocha": "latest",
-    "mocha-sinon": "latest",
-    "sinon": "latest",
-    "sinon-chai": "latest"
-  },
-  "scripts": {
-    "lint": "jscs lib && jshint lib",
-    "test": "mocha -R spec --timeout 10000 test.js",
-    "test:watch": "npm run test -- -w",
-    "pretest": "npm run lint"
+    "mocha": "3.4.2"
   }
 }
