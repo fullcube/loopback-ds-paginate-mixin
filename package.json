@@ -15,19 +15,18 @@
     "url": "https://github.com/fullcube/loopback-ds-paginate-mixin"
   },
   "dependencies": {
-    "debug": "2.x",
-    "depd": "^1.1.0",
-    "lodash": "3.9.3",
-    "loopback-datasource-juggler": "2.30.1"
+    "bluebird": "3.5.0",
+    "debug": "2.6.8",
+    "depd": "1.1.0",
+    "lodash": "4.17.4"
   },
   "devDependencies": {
-    "bluebird": "2.9.24",
     "chai": "latest",
-    "jscs": "1.13.x",
+    "jscs": "3.0.7",
     "jshint": "latest",
-    "loopback": "2.x",
-    "loopback-connector-mongodb": "^1.11.1",
-    "loopback-testing": "1.x",
+    "loopback": "3.8.0",
+    "loopback-connector-mongodb": "3.2.0",
+    "loopback-testing": "1.4.0",
     "mocha": "latest",
     "mocha-sinon": "latest",
     "sinon": "latest",

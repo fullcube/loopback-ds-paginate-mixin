@@ -15,10 +15,5 @@
      "value": 120,
      "allowComments": true,
      "allowRegex": true
-  },
-  "validateJSDoc": {
-    "checkParamNames": false,
-    "checkRedundantParams": false,
-    "requireParamTypes": true
   }
 }
