@@ -37,7 +37,7 @@
     "coveralls": "2.13.1",
     "eslint": "4.1.1",
     "eslint-config-fullcube": "3.0.0",
-    "husky": "0.14.1",
+    "husky": "0.14.2",
     "loopback": "3.8.0",
     "loopback-connector-mongodb": "3.2.0",
     "loopback-testing": "1.4.0",
