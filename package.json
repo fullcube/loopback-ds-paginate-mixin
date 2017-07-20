@@ -44,7 +44,7 @@
     "mocha": "3.4.2",
     "nyc": "11.0.3",
     "semantic-release": "6.3.6",
-    "validate-commit-msg": "2.12.2"
+    "validate-commit-msg": "2.13.0"
   },
   "config": {
     "commitTypeMap": {
