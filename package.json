@@ -35,7 +35,7 @@
     "condition-circle": "1.5.0",
     "conventional-commit-types": "2.1.0",
     "coveralls": "2.13.1",
-    "eslint": "4.1.1",
+    "eslint": "4.5.0",
     "eslint-config-fullcube": "3.0.0",
     "husky": "0.14.1",
     "loopback": "3.8.0",
