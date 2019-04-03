@@ -24,7 +24,7 @@
     "commitmsg": "validate-commit-msg"
   },
   "dependencies": {
-    "bluebird": "3.5.0",
+    "bluebird": "3.5.4",
     "debug": "2.6.8",
     "depd": "1.1.0",
     "lodash": "4.17.4"
